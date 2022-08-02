@@ -22,23 +22,24 @@ us_treasuries = ['^TNX', '^IRX', '^TYX']
 
 # Global function to check Fundamental Test results
 def check_fundamental(test_data, test_type):
-    if test_type == 'bal':
-        if 'balanceSheetHistoryQuarterly' in test_data and test_data['balanceSheetHistoryQuarterly']['C'] is not None:
-            return True
-        else:
-            return False
+    if test_type == 'all':
+        return (
+            'balanceSheetHistoryQuarterly' in test_data
+            and 'incomeStatementHistoryQuarterly' in test_data
+            and 'cashflowStatementHistoryQuarterly' in test_data
+        )
+
+    elif test_type == 'bal':
+        return (
+            'balanceSheetHistoryQuarterly' in test_data
+            and test_data['balanceSheetHistoryQuarterly']['C'] is not None
+        )
+
     elif test_type == 'inc':
-        if 'incomeStatementHistoryQuarterly' in test_data and \
-                        test_data['incomeStatementHistoryQuarterly']['C'] is not None:
-            return True
-        else:
-            return False
-    elif test_type == 'all':
-        if 'balanceSheetHistoryQuarterly' in test_data and 'incomeStatementHistoryQuarterly' in test_data and \
-                        'cashflowStatementHistoryQuarterly' in test_data:
-            return True
-        else:
-            return False
+        return (
+            'incomeStatementHistoryQuarterly' in test_data
+            and test_data['incomeStatementHistoryQuarterly']['C'] is not None
+        )
 
 
 # Main Test Module Class

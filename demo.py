@@ -44,9 +44,9 @@ def defaultapi(ticker):
 
 
 def customapi(queries, ts):
-    yf = YF(ts[0] if 1 == len(ts) else ts)
+    yf = YF(ts[0] if len(ts) == 1 else ts)
     for q in queries:
-        print('%s:' % (q,))
+        print(f'{q}:')
         timeit(lambda: print(getattr(yf, q)()))
 
 
@@ -73,15 +73,15 @@ def timeit(f, *args):
 
 
 if __name__ == '__main__':
-    api = set(s for s in dir(YF) if s.startswith('get_'))
+    api = {s for s in dir(YF) if s.startswith('get_')}
     api.update(MODULE_ARGS)
     api.update(HELP_ARGS)
     ts = sys.argv[1:]
     queries = [q for q in ts if q in api]
-    ts = [t for t in ts if not t in queries] or DEFAULT_ARGS
+    ts = [t for t in ts if t not in queries] or DEFAULT_ARGS
     if [h for h in HELP_ARGS if h in queries]:
         helpapi(queries)
     elif queries:
         customapi(queries, ts)
     else:
-        timeit(defaultapi, ts[0] if 1 == len(ts) else ts)
+        timeit(defaultapi, ts[0] if len(ts) == 1 else ts)
